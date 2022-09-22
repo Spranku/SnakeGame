@@ -29,7 +29,7 @@ void ASnakeElementBase::Tick(float DeltaTime)
 
 }
 
-//Реализацию старого вида нужно удалить
+//Реализацию старого вида нужно удалить!!!
 //void ASnakeElementBase::SetFirstElementType() 
 //{
 //}
