@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interactable.h"		//Подкл.класса интерфейса 
 #include "SnakeElementBase.generated.h"
 
 class UStaticMeshComponent;
 
 UCLASS()
-class SNAKEGAME_API ASnakeElementBase : public AActor
+class SNAKEGAME_API ASnakeElementBase : public AActor, public IInteractable		//мн.наследование
 {
 	GENERATED_BODY()
 	
@@ -33,4 +34,19 @@ public:
 	void SetFirstElementType_Implementation(); //Еще одна реализация метода.Реализацию этого метода в С++ мы оставим пустым
 	//Эту реалищацию мы напрямую никогда не вызовем,ведь мы вызываем наш метод.
 
+	//Добавляем имплементацию метода Interact
+	virtual void Interact(AActor* Interactor) override;
+
+	//Напишем метод HandleBeginOverlap
+	//Примитив-компонент указатель - будет overlap component
+	//А так же Actor,который с`overlap`ился 
+	//Далее примитив-компонент другого Actor`a,который вызвал событие overlap`а
+	//После этого техническая информация типа...
+	UFUNCTION()
+		void HandleBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent,
+			int32 OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult &SweepResult);
 };
