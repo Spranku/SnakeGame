@@ -46,8 +46,23 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override; 
 
+	UFUNCTION(BlueprintCallable)
 	void AddSnakeElement(int ElementsNum = 1); // Дефолтное значение элементов
 
+	UFUNCTION(BlueprintCallable)
 	void Move(); //float DeltaTime Метод Move,который будет принимать на вход DeltaTime. Позднее DeltaTime больше не потребуется и его надо удалить везде.
 
+	//Если указатель валидныЙ,то на SnakeOwner будем вызывать ивент,
+	//что наш блок сколлизился с чем-либо. В качестве аргумента,в 
+	//этот метод из блока будем передавать какой именно блок вызвал
+	//данное событие.Создаем имплементацию...
+	//
+	//Помимо того какой блок сколлизился,змейке так же нужно знать 
+	//с чем она сколлизилась.
+	// 
+	//Создадим второй аргумент Actor`a "Other", который будет передавать Actor`a
+	//с которым сколлизился наш блок.
+	UFUNCTION()
+	void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
+	
 };

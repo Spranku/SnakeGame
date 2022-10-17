@@ -3,6 +3,7 @@
 
 #include "SnakeElementBase.h"
 #include <Engine/Classes/Components/StaticMeshComponent.h>
+#include "Snake.h"			//header змейки
 
 // Sets default values
 ASnakeElementBase::ASnakeElementBase()
@@ -62,12 +63,21 @@ void ASnakeElementBase::Interact(AActor* Interactor)
 {
 }
 
-void ASnakeElementBase::HandleBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
-	AActor* OtherActor, 
-	UPrimitiveComponent* OtherComponent, 
-	int32 OtherBodyIndex, 
-	bool bFromSweep, 
+void ASnakeElementBase::HandleBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-}
 
+	//Внутри метода обработки overlap`a проверим валидность указателя на змейку,
+		//введя конструкцию:
+	if (IsValid(SnakeOwner))
+	
+		//Вызовем на SnakeOwner метод,который только что создали.В качестве
+		//аргумента указываем эелемент,который змейка будет обрабатывать.
+		//Через запятую передадим OtherActor
+		SnakeOwner->SnakeElementOverlap(this, OtherActor);
+		//Теперь змейка знает КАКОЙ блок сколлизился.Знает С ЧЕМ он сколлизился!
+}

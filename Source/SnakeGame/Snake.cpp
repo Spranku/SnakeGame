@@ -66,6 +66,10 @@ void ASnake::AddSnakeElement(int ElementsNum)	//Аргумент,который мы добавили в S
 		//NewSnakeElem->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform); //Присоединяем Actor`a. В качестве правил присоедиенния указываем KeepRelative
 		//Позднее мы избавились этой строки,т.к. при перемещении AttachToActor будет ломать. Создадим цикл по блокам ниже.
 
+		//При добавлении нового блока, мы будем устанавливать вручную значение SnakeOwner.
+		//SnakeOwner устанавливаем в this.
+		NewSnakeElem->SnakeOwner = this;
+
 		int32 ElemIndex = SnakeElements.Add(NewSnakeElem); //запись элемента в массив
 		//Во время добавления элемента можно здесь указать int32 ElemIndex = ...
 		//Проверка если ElemIndex = 0,то это голова змейки
@@ -125,5 +129,31 @@ void ASnake::Move() //float DeltaTime больше не нужен
 		CurrentElement->SetActorLocation(PrevLocation);
 	}
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
+}
+
+//Создадим реализацию метода внутри змейки
+void ASnake::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other) //Т.к. мы ранее поправили сигнатуру в h. файле, в срр надо добавить AActor* Other
+{
+	//Проверяем указатель на валидность.Если указатель 
+	//валиден,то мы можем найти конкретный блок.
+	if (IsValid(OverlappedElement))
+	{
+		//Создадим переменную, в которую 
+		//будем записывать наш индекс.
+		// 
+		//Возьмем весь массив SnakeElements и при помощи
+		// метода Find индекс требуемого элемента.
+		// 
+		//Запоминаем в булевую переменную bISFirst
+		//значение о том,что наш блок является головой.
+		// 
+		//В аргументы к булевой функции зададим элемент
+		//overlapped и индекс.
+		int32 ElemIndex;
+		SnakeElements.Find(OverlappedElement, ElemIndex);
+		bool bIsFirst = ElemIndex == 0;
+		//Если индекс = 0, то элемент у нас первый (голова)
+	}
+	
 }
 
