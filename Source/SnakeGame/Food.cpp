@@ -26,7 +26,7 @@ void AFood::Tick(float DeltaTime)
 }
 
 //Имплементация метода остается пока пуста
-void AFood::Interact(AActor* Interactor)
+void AFood::Interact(AActor* Interactor, bool bIsHead) // добавялем bIsHead в срр файл
 {
 
 }

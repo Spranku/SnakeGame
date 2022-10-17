@@ -26,6 +26,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	//Этот метод перегружен (override),т.к он взят из класса интерфейса Interactable
-	virtual void Interact(AActor* Interactor) override;
+	virtual void Interact(AActor* Interactor , bool bIsHead) override; // добавялем bIsHead в файл
 
 };

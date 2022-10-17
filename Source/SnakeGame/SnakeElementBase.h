@@ -42,7 +42,7 @@ public:
 	//Эту реалищацию мы напрямую никогда не вызовем,ведь мы вызываем наш метод.
 
 	//Добавляем имплементацию метода Interact
-	virtual void Interact(AActor* Interactor) override;
+	virtual void Interact(AActor* Interactor , bool bIsHead) override; // добавялем bIsHead в файл
 
 	//Напишем метод HandleBeginOverlap
 	//Примитив-компонент указатель - будет overlap component

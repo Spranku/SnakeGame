@@ -22,7 +22,8 @@ class SNAKEGAME_API IInteractable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION()
-		virtual void Interact(AActor* Interactor);
+	// UFUNCTION() нужно убрать,чтобы не было даже намека,что этот интерфейс будет просачиватьс€ в BP
+	// ƒобавл€ем булевую переменную 
+		virtual void Interact(AActor* Interactor,bool bIsHead ); //// добав€лем bIsHead в файл
 
 };

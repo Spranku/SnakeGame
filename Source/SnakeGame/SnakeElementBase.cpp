@@ -59,7 +59,7 @@ void ASnakeElementBase::SetFirstElementType_Implementation()
 }
 
 //Имплементация метода пока что пустой реализации 
-void ASnakeElementBase::Interact(AActor* Interactor)
+void ASnakeElementBase::Interact(AActor* Interactor, bool bIsHead) // добавялем bIsHead в срр файл
 {
 }
 
