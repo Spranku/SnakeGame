@@ -2,6 +2,7 @@
 
 
 #include "Food.h"
+#include "Snake.h" //Подключение header`а змейки для проверки события
 
 // Sets default values
 AFood::AFood()
@@ -28,6 +29,22 @@ void AFood::Tick(float DeltaTime)
 //Имплементация метода остается пока пуста
 void AFood::Interact(AActor* Interactor, bool bIsHead) // добавялем bIsHead в срр файл
 {
+	// Условие проверки: Если наступило событие, и это - голова,
+	// то в змейку надо добавить один элемент. Для этого 
+	// подключим заголовочный Snake.h
+	if (bIsHead)
+	{
+		//Каст интеракта к змейке.
+		auto Snake = Cast<ASnake>(Interactor);
+	    //Проверка полученного указателя на валидность
+		if (IsValid(Snake))
+		{
+			// Пропишем в Food вызов одного элемента.
+			// Пустые скобки подразумевают,что будет 
+			// добавлен один элемент по умолчанию.
+			Snake->AddSnakeElement();
+		}
 
+	}
 }
 

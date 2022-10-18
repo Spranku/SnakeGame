@@ -77,6 +77,12 @@ void ASnake::AddSnakeElement(int ElementsNum)	//Аргумент,который мы добавили в S
 		if (ElemIndex == 0)
 		{
 			NewSnakeElem->SetFirstElementType(); // Вызов метода,который точно скажет элементу что он - первый.
+
+			// Код добавления элемента в змейку. Здесь можно получать из NewSnakeElem
+			// MeshComponent а затем биндить на него определенное событие. 
+			// Нужно подключить файл StaticMeshComponent, а заодно компонент
+			// BeginOverlap.
+			// NewSnakeElem->MeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ASnakeElementBase::HandleBeginOverlap);
 		}
 	}
 
@@ -115,6 +121,10 @@ void ASnake::Move() //float DeltaTime больше не нужен
 	//AddActorWorldOffset(MovementVector); //Перемещаем наш Actor
 	//Нужно удалить эту строку для реализации перемещения змейки по блокам 
 
+	// Добавим вызов метода Toggle перед тем, как двигать все блоки
+	// Сначала получим 0 элемент и вызовем на нём ToggleCollision
+	SnakeElements[0]->ToggleCollision();
+
 	//Для того,чтобы ближе к голове переместить все наши блоки на 1,
 	//Создадим цикл for ,чтобы задавать какие именно индексы мы будем брать.
 	for (int i = SnakeElements.Num() - 1; i > 0; i--)
@@ -130,6 +140,10 @@ void ASnake::Move() //float DeltaTime больше не нужен
 		CurrentElement->SetActorLocation(PrevLocation);
 	}
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
+
+	// Проведем проверку. В начале мы выключили, далее переместили
+	// все блоки, переместили голову, включили коллизию обратно. 
+	SnakeElements[0]->ToggleCollision();
 }
 
 //Создадим реализацию метода внутри змейки
