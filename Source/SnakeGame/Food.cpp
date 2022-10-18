@@ -34,6 +34,7 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) // добавялем bIsHead в ср
 	// подключим заголовочный Snake.h
 	if (bIsHead)
 	{
+		
 		//Каст интеракта к змейке.
 		auto Snake = Cast<ASnake>(Interactor);
 	    //Проверка полученного указателя на валидность
@@ -43,6 +44,10 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) // добавялем bIsHead в ср
 			// Пустые скобки подразумевают,что будет 
 			// добавлен один элемент по умолчанию.
 			Snake->AddSnakeElement();
+
+			//Уничтожение еды после overlap
+			this->Destroy();
+			
 		}
 
 	}
