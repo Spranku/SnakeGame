@@ -2,8 +2,10 @@
 
 
 #include "Snake.h"
-#include "Interactable.h"		//Подключение файла интерфейсов,чтобы его использовать
-#include "SnakeElementBase.h"	//Подключение header нашего класса SnakeElement
+// Подключение файла интерфейсов,чтобы его использовать
+#include "Interactable.h"
+// Подключение header нашего класса SnakeElement
+#include "SnakeElementBase.h"	
 
 // Sets default values
 ASnake::ASnake()
@@ -11,11 +13,14 @@ ASnake::ASnake()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ElementSize = 100.f;  //Теперь от головы змейки откладываются элементы,размером ElementSize
+	// От головы змейки откладываются элементы,размером ElementSize
+	ElementSize = 60.f;  
 
-	MovementSpeed = 10.f; //Скорость по умолчанию 10
-
-	LastMoveDirection = EMovementDirection::DOWN; // Направление движения по умолчанию
+	// Скорость по умолчанию 10
+	MovementSpeed = 0.5f; 
+   
+	// Направление движения по умолчанию
+	LastMoveDirection = EMovementDirection::DOWN; 
 }
 
 // Called when the game starts or when spawned
@@ -23,60 +28,78 @@ void ASnake::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Чтобы поменять частоту Tick. Т.к. это будет скорость,то мы можем исп. имеющуюся переменную MovementSpeed.
-	//Но если изначально она означала см/сек,то теперь она будет абстрактно обозначать просто секунды. 
-	//Раз в сколько секунд змейка будет перемещаться ровно на ElementSize;
-	SetActorTickInterval(MovementSpeed);
+	// Чтобы поменять частоту Tick. Т.к. это будет скорость,то мы можем исп. имеющуюся переменную MovementSpeed.
+	// Но если изначально она означала см/сек,то теперь она будет абстрактно обозначать просто секунды. 
+	// Раз в сколько секунд змейка будет перемещаться ровно на ElementSize;
+	SetActorTickInterval(MovementSpeed);	
+	// Эта строчка использовалась для проверки спавна ЗМЕЙКИ.Когда мы создаем чисто элементы - её нужно убрать!
+	// GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, GetActorTransform()); //Создаем элементы змейки на BeginPlay.Передедим пока что GetActorTransform
+	// При начале игры змейка будет состоять из 5 элементов
+	AddSnakeElement(5); 
 
-	//Эта строчка использовалась для проверки спавна ЗМЕЙКИ.Когда мы создаем чисто элементы - её нужно убрать!
-	//GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, GetActorTransform()); //Создаем элементы змейки на BeginPlay.Передедим пока что GetActorTransform
+	FTimerHandle Handle;
+	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ASnake::HighSpeed, 30.f, false);
 
-	AddSnakeElement(5); //При начале игры змейка будет состоять из 5 элементов
+	FTimerHandle Handle2;
+	GetWorld()->GetTimerManager().SetTimer(Handle2, this, &ASnake::HighSpeed2, 60.f, false);
+
+	FTimerHandle Handle3;
+	GetWorld()->GetTimerManager().SetTimer(Handle3, this, &ASnake::HighSpeed3, 120.f, false);
 }
 
 // Called every frame
 void ASnake::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Move(); // Движение каждый кадр. DeltaTime нужна для того,чтобы избавиться от зависимости от кадров.//DeltaTime больше не нужен
+	// Движение каждый кадр. DeltaTime нужна для того,чтобы избавиться от зависимости от кадров.
+	// DeltaTime больше не нужен
+	Move(); 
 }
 
-void ASnake::AddSnakeElement(int ElementsNum)	//Аргумент,который мы добавили в Snake.h (значение по умолчанию прописывать не надо!)
+// Аргумент,который мы добавили в Snake.h (значение по умолчанию прописывать не надо!)
+void ASnake::AddSnakeElement(int ElementsNum)	
 {
-	for (int i = 0; i < ElementsNum; ++i)		//Цикл от 0 до кол-ва элементов
+	// Цикл от 0 до кол-ва элементов
+	for (int i = 0; i < ElementsNum; ++i)		
 	{
-		//1 вариант:Сперва создаётся элемент,сохраняется в переменную
-		//auto NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, GetActorTransform());    //Transform каждый раз берется один и тот же
+		// 1 вариант:Сперва создаётся элемент,сохраняется в переменную
+		// auto NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, GetActorTransform());    //Transform каждый раз берется один и тот же
 		// //Узнаем кол-во элементов:
-		//SnakeElements.Num(); - если на данный момент элементов в массиве нет
-		//SnakeElements.Num()*ElementSize; - Если Num больше 0,то мы умножим его на ElementSize
+		// SnakeElements.Num(); - если на данный момент элементов в массиве нет
+		// SnakeElements.Num()*ElementSize; - Если Num больше 0,то мы умножим его на ElementSize
 		// В таком случае FTransform будет:
 		// auto NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass,FTransform (GetActorLocation()-FVector(SnakeElements*ElementSize,0,0));
 		// Чтобы сократить эту запись, сформируем Location: FVector NewLocation(...)
 
-		FVector NewLocation(SnakeElements.Num()*ElementSize, 0, 0); //Задали расположение Location
+		// Задали расположение Location
+		FVector NewLocation(SnakeElements.Num()*ElementSize, 0, 0); 
 
-		//FTransform NewTransform = FTransform(GetActorLocation()-FVector(SnakeElements.Num() * ElementSize, 0, 0));
+		// FTransform NewTransform = FTransform(GetActorLocation()-FVector(SnakeElements.Num() * ElementSize, 0, 0));
 		// А в скобки вместо этого всего вставим короткое имя: 
 		// auto NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform())
-		//В итоге получится:
+		// В итоге получится:
 
-		FTransform NewTransform(NewLocation); //Используем NewLocation чтобы проициализировать Transform
-		ASnakeElementBase* NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform); //Заспавнили новый элемент,сохранили его в переменной
+		// Используем NewLocation чтобы проициализировать Transform
+		FTransform NewTransform(NewLocation); 
+		// Заспавнили новый элемент,сохранили его в переменной
+		ASnakeElementBase* NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform); 
+		NewSnakeElem->SetActorHiddenInGame(true);
+		
+		// NewSnakeElem->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform); //Присоединяем Actor`a. В качестве правил присоедиенния указываем KeepRelative
+		// Позднее мы избавились этой строки,т.к. при перемещении AttachToActor будет ломать. Создадим цикл по блокам ниже.
 
-		//NewSnakeElem->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform); //Присоединяем Actor`a. В качестве правил присоедиенния указываем KeepRelative
-		//Позднее мы избавились этой строки,т.к. при перемещении AttachToActor будет ломать. Создадим цикл по блокам ниже.
-
-		//При добавлении нового блока, мы будем устанавливать вручную значение SnakeOwner.
-		//SnakeOwner устанавливаем в this.
+		// При добавлении нового блока, мы будем устанавливать вручную значение SnakeOwner.
+		// SnakeOwner устанавливаем в this.
 		NewSnakeElem->SnakeOwner = this;
 
-		int32 ElemIndex = SnakeElements.Add(NewSnakeElem); //запись элемента в массив
-		//Во время добавления элемента можно здесь указать int32 ElemIndex = ...
-		//Проверка если ElemIndex = 0,то это голова змейки
+		// Запись элемента в массив
+		int32 ElemIndex = SnakeElements.Add(NewSnakeElem); 
+		// Во время добавления элемента можно здесь указать int32 ElemIndex = ...
+		// Проверка если ElemIndex = 0,то это голова змейки
 		if (ElemIndex == 0)
 		{
-			NewSnakeElem->SetFirstElementType(); // Вызов метода,который точно скажет элементу что он - первый.
+			// Вызов метода,который точно скажет элементу что он - первый.
+			NewSnakeElem->SetFirstElementType(); 
 
 			// Код добавления элемента в змейку. Здесь можно получать из NewSnakeElem
 			// MeshComponent а затем биндить на него определенное событие. 
@@ -85,23 +108,31 @@ void ASnake::AddSnakeElement(int ElementsNum)	//Аргумент,который мы добавили в S
 			// NewSnakeElem->MeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ASnakeElementBase::HandleBeginOverlap);
 		}
 	}
-
 }
 
-void ASnake::Move() //float DeltaTime больше не нужен
+// float DeltaTime больше не нужен
+void ASnake::Move() 
 {
-	FVector MovementVector(ForceInitToZero); //Вектор движения
-	float  MovmentSpeed = ElementSize; //float DeltaTime больше не нужен
+	for (int i = SnakeElements.Num() - 1; i > 0; i--)
+	{
+		SnakeElements[0]->SetActorHiddenInGame(false);
+		SnakeElements[i]->SetActorHiddenInGame(false);
+	}
 
-	//1 Вариант реализации:
+	// Вектор движения
+	FVector MovementVector(ForceInitToZero);
+	// float DeltaTime больше не нужен
+	float  MovmentSpeed = ElementSize; 
+
+	// 1 Вариант реализации:
  
-	//if (LastMoveDirection == EMovementDirection::UP) //Если последнее направление движения = ВВЕРХ,то
-	//{
-	//	MovementVector = FVector(MovementSpeedDelta,0,0); // FVector() с положительным X
-	//}
+	// if (LastMoveDirection == EMovementDirection::UP) //Если последнее направление движения = ВВЕРХ,то
+	// {
+	//	 MovementVector = FVector(MovementSpeedDelta,0,0); // FVector() с положительным X
+	// }
 	//
 	
-	//2 вариант реализации:
+	// 2 вариант реализации:
 	switch (LastMoveDirection)
 	{
 	case EMovementDirection::UP:			//Если движение наверх,то
@@ -118,52 +149,53 @@ void ASnake::Move() //float DeltaTime больше не нужен
 		break;
 	}
 
-	//AddActorWorldOffset(MovementVector); //Перемещаем наш Actor
-	//Нужно удалить эту строку для реализации перемещения змейки по блокам 
+	// AddActorWorldOffset(MovementVector); //Перемещаем наш Actor
+	// Нужно удалить эту строку для реализации перемещения змейки по блокам 
 
 	// Добавим вызов метода Toggle перед тем, как двигать все блоки
 	// Сначала получим 0 элемент и вызовем на нём ToggleCollision
 	SnakeElements[0]->ToggleCollision();
 
-	//Для того,чтобы ближе к голове переместить все наши блоки на 1,
-	//Создадим цикл for ,чтобы задавать какие именно индексы мы будем брать.
+	// Для того,чтобы ближе к голове переместить все наши блоки на 1,
+	// Создадим цикл for ,чтобы задавать какие именно индексы мы будем брать.
 	for (int i = SnakeElements.Num() - 1; i > 0; i--)
 	{
-		//В теле цикла нужно получить текущий элемент:
+		// В теле цикла нужно получить текущий элемент:
 		auto CurrentElement = SnakeElements[i];
-		//Предыдущий элемент:
+		// Предыдущий элемент:
 		auto PrevElement = SnakeElements[i - 1];
-		//После этого сместим наш элемент в направлении предыдущего.
-		//Для этого у пердыдущего элемента получаем точку в пространстве,которая будет равна его Location:
+		// После этого сместим наш элемент в направлении предыдущего.
+		// Для этого у пердыдущего элемента получаем точку в пространстве,которая будет равна его Location:
 		FVector PrevLocation = PrevElement->GetActorLocation();
-		//А текущий элемент будем смещать на место предыдущего:
+		// А текущий элемент будем смещать на место предыдущего:
 		CurrentElement->SetActorLocation(PrevLocation);
 	}
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
-
 	// Проведем проверку. В начале мы выключили, далее переместили
 	// все блоки, переместили голову, включили коллизию обратно. 
 	SnakeElements[0]->ToggleCollision();
 }
 
-//Создадим реализацию метода внутри змейки
-void ASnake::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other) //Т.к. мы ранее поправили сигнатуру в h. файле, в срр надо добавить AActor* Other
+// Создание реализации метода внутри змейки
+// Т.к. мы ранее поправили сигнатуру в h. файле, в срр надо добавить AActor* Other
+void ASnake::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other) 
 {
-	//Проверяем указатель на валидность.Если указатель 
-	//валиден,то мы можем найти конкретный блок.
+	// Проверяем указатель на валидность.Если указатель 
+	// валиден,то мы можем найти конкретный блок.
 	if (IsValid(OverlappedElement))
 	{
-		//Создадим переменную, в которую 
-		//будем записывать наш индекс.
+		
+		// Создадим переменную, в которую 
+		// будем записывать наш индекс.
 		// 
-		//Возьмем весь массив SnakeElements и при помощи
-		// метода Find индекс требуемого элемента.
+		// Возьмем весь массив SnakeElements и при помощи
+		// метода Find найдем индекс требуемого элемента.
 		// 
-		//Запоминаем в булевую переменную bISFirst
-		//значение о том,что наш блок является головой.
+		// Запоминаем в булевую переменную bISFirst
+		// значение о том,что наш блок является головой.
 		// 
-		//В аргументы к булевой функции зададим элемент
-		//overlapped и индекс.
+		// В аргументы к булевой функции зададим элемент
+		// overlapped и индекс.
 		int32 ElemIndex;
 		SnakeElements.Find(OverlappedElement, ElemIndex);
 		bool bIsFirst = ElemIndex == 0;
@@ -175,6 +207,8 @@ void ASnake::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* O
 		// наш актор к этому интерфейссу.В аргументе 
 		// передадим нашего Actor`a.
 		IInteractable* InteractableInterface = Cast<IInteractable>(Other);
+		
+
 		// Чтобы узнать успешно ли скастовался Actor, проверяем что
 		// указатель получился не нулевой:
 		if (InteractableInterface)
@@ -186,13 +220,30 @@ void ASnake::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* O
 			// интерактирует с Actor`ом,реализовывающим данный 
 			// интерфейс.
 			InteractableInterface->Interact(this, bIsFirst);
-			//Помимо самой змейки будем сообщать был ли наш элемент первый,
+			// Помимо самой змейки будем сообщать был ли наш элемент первый,
 			// тоесть - головой (bIsFirst)
 			// 
-			//Дополнительно в метод будем передавать значение о том,происходит
-			//ли интеракт с головой змейки.
+			// Дополнительно в метод будем передавать значение о том,происходит
+			// ли интеракт с головой змейки.
 		}
-	}
-	
+	}	
 }
+
+void ASnake::HighSpeed()
+{
+	SetActorTickInterval(MovementSpeed = 0.35);
+}
+
+void ASnake::HighSpeed2()
+{
+	SetActorTickInterval(MovementSpeed = 0.25);
+}
+
+void ASnake::HighSpeed3()
+{
+	SetActorTickInterval(MovementSpeed = 0.1);
+}
+
+
+
 

@@ -2,54 +2,76 @@
 
 
 #include "Food.h"
-#include "Snake.h" //Подключение header`а змейки для проверки события
+#include "Snake.h" //РџРѕРґРєР»СЋС‡РµРЅРёРµ header`Р° Р·РјРµР№РєРё РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃРѕР±С‹С‚РёСЏ
+#include "Block.h"
+#include "PlayerPawnBase.h"
+
+
 
 // Sets default values
 AFood::AFood()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned
 void AFood::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AFood::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-//Имплементация метода остается пока пуста
-void AFood::Interact(AActor* Interactor, bool bIsHead) // добавялем bIsHead в срр файл
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+void AFood::Interact(AActor* Interactor, bool bIsHead) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ bIsHead пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 {
-	// Условие проверки: Если наступило событие, и это - голова,
-	// то в змейку надо добавить один элемент. Для этого 
-	// подключим заголовочный Snake.h
+	// РџРёС€РµРј СѓСЃРѕРѕРІРёСЏ РїСЂРѕРІРµСЂРєРё: РµСЃР»Рё РЅР°СЃС‚СѓРїРёР»Рѕ СЃРѕР±С‹С‚РёРµ Рё СЌС‚Рѕ
+	// РіРѕР»РѕРІР° - С‚Рѕ РІ Р·РјРµР№РєСѓ РЅСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ 1 СЌР»РµРјРµРЅС‚ 
+	// Р”Р»СЏ СЌС‚РѕРіРѕ РїРѕРґРєР»СЋС‡РёРј Р·Р°РіРѕР»РѕРІРѕС‡РЅС‹Р№ Snake.h
 	if (bIsHead)
 	{
-		
-		//Каст интеракта к змейке.
+		// РљР°СЃС‚ РёРЅС‚РµСЂР°РєС‚Р° Рє Р·РјРµР№РєРµ.
 		auto Snake = Cast<ASnake>(Interactor);
-	    //Проверка полученного указателя на валидность
+		// РџРѕСЃР»Рµ РїСЂРѕРІРµСЂРёРј РїРѕР»СѓС‡РµРЅРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РІР°Р»РёРґРЅРѕСЃС‚СЊ 
 		if (IsValid(Snake))
 		{
-			// Пропишем в Food вызов одного элемента.
-			// Пустые скобки подразумевают,что будет 
-			// добавлен один элемент по умолчанию.
+		    // РџСЂРѕРїРёС€РµРј РІ  Food РІС‹Р·РѕРІ РѕРґРЅРѕРіРѕ СЌРґРµРјРµРЅС‚Р°.
+		    // РњС‹ СѓР¶Рµ РѕРїСЂРµРґРµР»РёР»Рё AddSnakeElement 
+			// () - РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґРѕР±Р°РІР»СЏРµС‚СЃСЏ 1 СЌР»РµРјРµРЅС‚.
 			Snake->AddSnakeElement();
+			Snake->Score++;
 
-			//Уничтожение еды после overlap
+			// Р’РѕР·РјРѕР¶РЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС†РёСЏ РґР»СЏ СЃРїР°РІРЅР° РµРґС‹?
+			// if(Snake->Score > 10)
+			// {
+			//	 this =  GetWorld()->SpawnActor(....
+			// }
+				
+			// РЈРЅРёС‡С‚РѕР¶РµРЅРёРµ РµРґС‹ РїРѕСЃР»Рµ overlap
+			//
 			this->Destroy();
-			
 		}
-
 	}
 }
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
 

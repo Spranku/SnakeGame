@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interactable.h"			//подкл.класса интерфейса
+#include "Interactable.h"	
 #include "Food.generated.h"
 
+class ABlock;
 
 UCLASS()
 class SNAKEGAME_API AFood : public AActor, public IInteractable //Мн.наследование
@@ -25,7 +26,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//Этот метод перегружен (override),т.к он взят из класса интерфейса Interactable
-	virtual void Interact(AActor* Interactor , bool bIsHead) override; // добавялем bIsHead в файл
+	virtual void Interact(AActor* Interactor , bool bIsHead) override;
 
+
+	
 };

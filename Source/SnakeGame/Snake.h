@@ -6,10 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "Snake.generated.h"
 
-class ASnakeElementBase; //forward declaration. Указываем элемент змейки
+// forward declaration. Указываем элемент змейки
+class ASnakeElementBase; 
 
+// Для направления движения используется перечисление enum
 UENUM()
-enum class EMovementDirection //Для направления движения используется перечисление enum
+enum class EMovementDirection 
 {
 	UP,DOWN,LEFT,RIGHT
 };
@@ -23,20 +25,34 @@ public:
 	// Sets default values for this actor's properties
 	ASnake();
 
-	UPROPERTY(EditDefaultsOnly)//Доступно для редактирования в BP
-	TSubclassOf<ASnakeElementBase> SnakeElementClass; //Переменная с классом,в которой указан SnakeElement
+	// EditDefaultsOnly - занчит доступно для редактирования в BP
+	UPROPERTY(EditDefaultsOnly)
+	// Переменная с классом,в которой указан SnakeElement
+	TSubclassOf<ASnakeElementBase> SnakeElementClass; 
 
-	UPROPERTY(EditDefaultsOnly) //Доступно для редактирования в BP
-		float ElementSize;		//переменная,хранящая размер элемента змейки
+	// Переменная,хранящая размер элемента змейки
+	UPROPERTY(EditDefaultsOnly) 
+		float ElementSize;		
 
-	UPROPERTY(EditDefaultsOnly) //Доступно для редактирования в BP
-		float MovementSpeed;		//Параметр,отвечающий за скорость змейки
+	UPROPERTY(EditDefaultsOnly) //EditDefaultsOnly
+	// Параметр,отвечающий за скорость змейки
+		float MovementSpeed;		
+	   
 
 	UPROPERTY()
-	TArray<ASnakeElementBase*> SnakeElements; // Массив из УКАЗАТЕЛЕЙ* на элементы
+	// Массив из УКАЗАТЕЛЕЙ* на элементы
+	TArray<ASnakeElementBase*> SnakeElements; 
 
 	UPROPERTY()
-	EMovementDirection LastMoveDirection; //Сохранение последнего направления движения
+	// Сохранение последнего направления движения
+	EMovementDirection LastMoveDirection; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Score = 0;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//	int Life = 1;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -47,22 +63,35 @@ public:
 	virtual void Tick(float DeltaTime) override; 
 
 	UFUNCTION(BlueprintCallable)
-	void AddSnakeElement(int ElementsNum = 1); // Дефолтное значение элементов
+	// Дефолтное значение элементов
+	void AddSnakeElement(int ElementsNum = 1); 
 
 	UFUNCTION(BlueprintCallable)
-	void Move(); //float DeltaTime Метод Move,который будет принимать на вход DeltaTime. Позднее DeltaTime больше не потребуется и его надо удалить везде.
-
-	//Если указатель валидныЙ,то на SnakeOwner будем вызывать ивент,
-	//что наш блок сколлизился с чем-либо. В качестве аргумента,в 
-	//этот метод из блока будем передавать какой именно блок вызвал
-	//данное событие.Создаем имплементацию...
+	// float DeltaTime.Позднее DeltaTime больше не потребуется и его надо удалить везде.
+	// Метод Move,который будет принимать на вход DeltaTime. 
+	void Move(); 
+	
+	// Если указатель валидныЙ,то на SnakeOwner будем вызывать ивент,
+	// что наш блок сколлизился с чем-либо. В качестве аргумента,в 
+	// этот метод из блока будем передавать какой именно блок вызвал
+	// данное событие.Создаем имплементацию...
 	//
-	//Помимо того какой блок сколлизился,змейке так же нужно знать 
-	//с чем она сколлизилась.
+	// Помимо того какой блок сколлизился,змейке так же нужно знать 
+	// с чем она сколлизилась.
 	// 
-	//Создадим второй аргумент Actor`a "Other", который будет передавать Actor`a
-	//с которым сколлизился наш блок.
+	// Создадим второй аргумент Actor`a "Other", который будет передавать Actor`a
+	// с которым сколлизился наш блок.
 	UFUNCTION()
 	void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
+
+	void HighSpeed();
+
+	void HighSpeed2();
+
+	void HighSpeed3();
+
+
+
+	
 	
 };

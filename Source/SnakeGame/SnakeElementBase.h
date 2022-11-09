@@ -4,14 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interactable.h"		//Подкл.класса интерфейса 
+//Подкл.класса интерфейса 
+#include "Interactable.h"	
 #include "SnakeElementBase.generated.h"
 
+// forvard-declaration
 class UStaticMeshComponent;
-class ASnake; // forvard-declaration,т.к. здесь ничего не известно о существовании Asnake. В срр файле подключим h.
+// forvard-declaration,т.к. здесь ничего не известно о существовании Asnake. В срр файле подключим h.
+class ASnake; 
 
+// Множественное наследование
 UCLASS()
-class SNAKEGAME_API ASnakeElementBase : public AActor, public IInteractable		//мн.наследование
+class SNAKEGAME_API ASnakeElementBase : public AActor, public IInteractable		
 {
 	GENERATED_BODY()
 	
@@ -20,13 +24,14 @@ public:
 	ASnakeElementBase();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly) 
-	UStaticMeshComponent* MeshComponent; //Добавление статик мэш компонента,чтобы переменную нельзя было переназначить в BP
+	// Добавление статик мэш компонента,чтобы переменную нельзя было переназначить в BP
+	UStaticMeshComponent* MeshComponent; 
 
-	//Всё это время в Snake Element внешнего доступа к змейке нет.
-	//Мы будем хранить указатель на змейку, которая заспавнила данный элемент.
-	//Прописываем указатель на змейку, которая владеет данным блоком.
+	// Всё это время в Snake Element внешнего доступа к змейке нет.
+	// Мы будем хранить указатель на змейку, которая заспавнила данный элемент.
+	// Прописываем указатель на змейку, которая владеет данным блоком.
 	UPROPERTY()
-		ASnake* SnakeOwner; 
+	ASnake* SnakeOwner; 
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,19 +41,24 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintNativeEvent)			   // Аргумент позволит перегурзить С++ эвент-метод в BP-наследнике
-    void SetFirstElementType();				   //Event,который точно скажет элементу что он - первый.
-	void SetFirstElementType_Implementation(); //Еще одна реализация метода.Реализацию этого метода в С++ мы оставим пустым
-	//Эту реалищацию мы напрямую никогда не вызовем,ведь мы вызываем наш метод.
+	// BlueprintNativeEvent позволит перегурзить С++ эвент-метод в BP-наследнике
+	UFUNCTION(BlueprintNativeEvent)		
+	// Event,который точно скажет элементу что он - первый.
+    void SetFirstElementType();
+	// Еще одна реализация метода.Реализацию этого метода в С++ мы оставим пустым
+	// Эту реалищацию мы напрямую никогда не вызовем,ведь мы вызываем наш метод.
+	void SetFirstElementType_Implementation(); 
+	
 
-	//Добавляем имплементацию метода Interact
-	virtual void Interact(AActor* Interactor , bool bIsHead) override; // добавялем bIsHead в файл
+	// Добавляем имплементацию метода Interact
+	// Добавялем bIsHead в файл
+	virtual void Interact(AActor* Interactor , bool bIsHead) override;
 
-	//Напишем метод HandleBeginOverlap
-	//Примитив-компонент указатель - будет overlap component
-	//А так же Actor,который с`overlap`ился 
-	//Далее примитив-компонент другого Actor`a,который вызвал событие overlap`а
-	//После этого техническая информация типа...
+	// Напишем метод HandleBeginOverlap
+	// Примитив-компонент указатель - будет overlap component
+	// А так же Actor,который с`overlap`ился 
+	// Далее примитив-компонент другого Actor`a,который вызвал событие overlap`а
+	// После этого техническая информация типа...
 	UFUNCTION()
 		void HandleBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
@@ -56,15 +66,15 @@ public:
 			int32 OtherBodyIndex,
 			bool bFromSweep,
 			const FHitResult& SweepResult);
-		//Изнутри блока будем сообщать змейке если вдруг она с чем-то столкнется.
-		//Будет момент, когда змейка должна будет кушать класс Food. У нас уже есть
-		//ивент SetFirstElementType, с ним будет проще показать, что змейка будет
-		//есть головой, а не хвостом (для этого существует отдельный метод),а
-		//поэтому нашей змейке нужно дополнительно сообщить, что элемент "голова"
-		//является первым.
+		// Изнутри блока будем сообщать змейке если вдруг она с чем-то столкнется.
+		// Будет момент, когда змейка должна будет кушать класс Food. У нас уже есть
+		// ивент SetFirstElementType, с ним будет проще показать, что змейка будет
+		// есть головой, а не хвостом (для этого существует отдельный метод),а
+		// поэтому нашей змейке нужно дополнительно сообщить, что элемент "голова"
+		// является первым.
 
 	UFUNCTION()
-		//Необходим метод,который будем вызывать из змейки.
+		// Необходим метод,который будем вызывать из змейки. 
 		void ToggleCollision();
 
 };

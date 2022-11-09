@@ -13,9 +13,6 @@ class UInteractable : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class SNAKEGAME_API IInteractable
 {
 	GENERATED_BODY()
@@ -24,6 +21,6 @@ class SNAKEGAME_API IInteractable
 public:
 	// UFUNCTION() нужно убрать,чтобы не было даже намека,что этот интерфейс будет просачиватьс€ в BP
 	// ƒобавл€ем булевую переменную 
-		virtual void Interact(AActor* Interactor,bool bIsHead ); //// добав€лем bIsHead в файл
+	virtual void Interact(AActor* Interactor,bool bIsHead ); //// добав€лем bIsHead в файл
 
 };

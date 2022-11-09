@@ -5,7 +5,12 @@
 
 // Add default functionality here for any IInteractable functions that are not pure virtual.
 
-void IInteractable::Interact(AActor* Interactor, bool bIsHead) // המבאגÿכול bIsHead ג סננ פאיכ
+// המבאגÿכול bIsHead ג סננ פאיכ
+void IInteractable::Interact(AActor* Interactor, bool bIsHead) 
 {
-
 }
+
+
+
+
+
