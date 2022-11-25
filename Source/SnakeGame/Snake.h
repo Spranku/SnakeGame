@@ -50,6 +50,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Score = 0;
 
+	// Лучший результат
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int newScore = 0;
+
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//	int Life = 1;
 
@@ -89,6 +94,8 @@ public:
 	void HighSpeed2();
 
 	void HighSpeed3();
+
+	void DestroySnake();
 
 
 

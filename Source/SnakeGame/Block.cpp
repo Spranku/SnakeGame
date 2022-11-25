@@ -21,13 +21,13 @@ void ABlock::BeginPlay()
 	
 	// Таймеры на увеличение блока
 	FTimerHandle Handle;
-	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ABlock::GetScale, 30.f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ABlock::GetScale, 90.f, false); //60
 
 	FTimerHandle Handle2;
-	GetWorld()->GetTimerManager().SetTimer(Handle2, this, &ABlock::GetScale2, 60.f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle2, this, &ABlock::GetScale2, 200.f, false); //120
 	
 	FTimerHandle Handle3;
-	GetWorld()->GetTimerManager().SetTimer(Handle3, this, &ABlock::GetScale3, 120.f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle3, this, &ABlock::GetScale3, 310.f, false); //180
 }
 
 // Called every frame

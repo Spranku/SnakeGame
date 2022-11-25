@@ -45,6 +45,7 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) // ��������
 			// () - по умолчанию добавляется 1 элемент.
 			Snake->AddSnakeElement();
 			Snake->Score++;
+			Snake->newScore = Snake->Score;
 
 			// Возможная конструкция для спавна еды?
 			// if(Snake->Score > 10)
@@ -53,7 +54,6 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) // ��������
 			// }
 				
 			// Уничтожение еды после overlap
-			//
 			this->Destroy();
 		}
 	}

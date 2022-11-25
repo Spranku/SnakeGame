@@ -38,13 +38,13 @@ void ASnake::BeginPlay()
 	AddSnakeElement(5); 
 
 	FTimerHandle Handle;
-	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ASnake::HighSpeed, 30.f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ASnake::HighSpeed, 90.f, false); // 60
 
 	FTimerHandle Handle2;
-	GetWorld()->GetTimerManager().SetTimer(Handle2, this, &ASnake::HighSpeed2, 60.f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle2, this, &ASnake::HighSpeed2, 200.f, false); // 120
 
 	FTimerHandle Handle3;
-	GetWorld()->GetTimerManager().SetTimer(Handle3, this, &ASnake::HighSpeed3, 120.f, false);
+	GetWorld()->GetTimerManager().SetTimer(Handle3, this, &ASnake::HighSpeed3, 310.f, false); // 240
 }
 
 // Called every frame
@@ -242,6 +242,11 @@ void ASnake::HighSpeed2()
 void ASnake::HighSpeed3()
 {
 	SetActorTickInterval(MovementSpeed = 0.1);
+}
+
+void ASnake::DestroySnake()
+{
+	
 }
 
 

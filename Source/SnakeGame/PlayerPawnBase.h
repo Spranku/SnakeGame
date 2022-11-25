@@ -44,6 +44,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AFood> FoodActorClass;
 
+	//  Переменная для инициализации очков Score в змейке,
+	//  т.к. змейка умирает и очки пропадают.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int PlayerScore = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int BestResult = 0;
+	 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -59,6 +67,12 @@ public:
 	void CreateSnakeActor(); 
 	// Функция создания еды
 	void CreateFoodActor();
+
+	/// /// /// /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void CreateBonusFood();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Методы на вертикальный и горизонтальный input`ы
 	UFUNCTION()

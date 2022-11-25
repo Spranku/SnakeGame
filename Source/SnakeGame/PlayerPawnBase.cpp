@@ -29,16 +29,20 @@ void APlayerPawnBase::BeginPlay()
 	CreateSnakeActor(); 
 	//Вызываем функцию создания еды
 	CreateFoodActor();
+
 }
 
 // Called every frame
 void APlayerPawnBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// Инициализация результата каждый кадр
+	PlayerScore = SnakeActor->Score;
+	BestResult = PlayerScore;
 }
 
 // Called to bind functionality to input
-void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) //Здесь мы будем настраивать наш input
+void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) //Настройка input
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
